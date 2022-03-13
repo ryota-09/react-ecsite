@@ -3,7 +3,6 @@ import {
   FormControl,
   Input,
   InputGroup,
-  Text,
   Stack,
   Flex,
 } from "@chakra-ui/react";
