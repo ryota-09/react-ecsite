@@ -24,7 +24,7 @@ export const ItemDetail = () => {
 
   return (
     <>
-      <Flex align="center" justify="center" height="100vh">
+      <Flex align="center" justify="center" height="110vh">
         <Box w="100%" bg="white" m={5} borderRadius="10px" shadow="md" p={4}>
           <Stack textAlign="center">
             <Image
@@ -46,16 +46,13 @@ export const ItemDetail = () => {
                 <Radio value="L">L: {selectedItem?.priceL}円</Radio>
               </Stack>
             </RadioGroup>
-            <CheckboxGroup
-              colorScheme="blue"
-              defaultValue={[]}
-            >
-              <Stack spacing={[1, 5]} direction={["column"]}>
-                {selectedItem?.toppingList?.map((topping) => (
-                    <Checkbox key={topping.id} value={topping.id}>{topping.name}</Checkbox>
-                ))}
-              </Stack>
-            </CheckboxGroup>
+            {selectedItem?.toppingList?.map((topping) => (
+              <CheckboxGroup colorScheme="blue" key={topping.id}>
+                <Stack spacing={[1, 5]} direction={["column"]}>
+                  <Checkbox value="topping.id">{topping.name}</Checkbox>
+                </Stack>
+              </CheckboxGroup>
+            ))}
           </Stack>
         </Box>
       </Flex>
