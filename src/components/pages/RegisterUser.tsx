@@ -5,7 +5,6 @@ import {
   InputGroup,
   Text,
   Stack,
-  Wrap,
   Flex,
 } from "@chakra-ui/react";
 import { FC } from "react";
