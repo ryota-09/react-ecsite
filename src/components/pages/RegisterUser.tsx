@@ -1,4 +1,3 @@
-import { EmailIcon } from "@chakra-ui/icons";
 import {
   Box,
   FormControl,
@@ -7,16 +6,21 @@ import {
   Text,
   Stack,
   Wrap,
+  Flex,
 } from "@chakra-ui/react";
 import { FC } from "react";
+import { PrimaryButton } from "../atoms/button/PrimaryButton";
 
 export const RegisterUser: FC = () => {
   const onChanegeLastName = (): void => {
     alert("チェンジ");
   };
+  const registerUser = () => {
+    alert("ボタン");
+  };
   return (
     <>
-      <Wrap justify="center" mt={10}>
+      <Flex align="center" justify="center" height="100vh">
         <Box
           w="300px"
           h="auto"
@@ -65,11 +69,7 @@ export const RegisterUser: FC = () => {
             </FormControl>
             <FormControl>
               <InputGroup>
-                <Input
-                  onChange={onChanegeLastName}
-                  placeholder="住所"
-                  mx={3}
-                />
+                <Input onChange={onChanegeLastName} placeholder="住所" mx={3} />
               </InputGroup>
             </FormControl>
             <FormControl>
@@ -99,10 +99,10 @@ export const RegisterUser: FC = () => {
                 />
               </InputGroup>
             </FormControl>
-
+            <PrimaryButton onClick={registerUser}>登録</PrimaryButton>
           </Stack>
         </Box>
-      </Wrap>
+      </Flex>
     </>
   );
 };
