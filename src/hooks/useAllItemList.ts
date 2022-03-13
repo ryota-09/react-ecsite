@@ -8,7 +8,7 @@ export const useAllItemList = () => {
 
   const getAllItemList = useCallback( async (): Promise<void> => {
   try {
-      const response = await axios.get("http://153.127.48.168:8080/ecsite-api/item/items/coffee");
+      const response = await axios.get<{items: Array<Item>}>("http://153.127.48.168:8080/ecsite-api/item/items/coffee");
       setItemList(response.data.items);
     }
   catch (error){

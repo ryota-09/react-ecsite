@@ -1,3 +1,4 @@
+import { ItemDetail } from "../components/pages/ItemDetail";
 import { ItemList } from "../components/pages/ItemList";
 import { Login } from "../components/pages/Login";
 import { RegisterUser } from "../components/pages/RegisterUser";
@@ -20,5 +21,11 @@ export const HomeRoutes = [
     name: "Login",
     exact: false,
     children: <Login />
+  },
+  {
+    path: "/itemDetail/:id",
+    name: "ItemDetail",
+    exact: false,
+    children: <ItemDetail />
   },
 ]

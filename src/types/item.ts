@@ -9,5 +9,5 @@ export type Item = {
   priceL: number;
   imagePath: string;
   deleted: boolean;
-  toppingList: Topping | null;
+  toppingList: Array<Topping> | null;
 };
