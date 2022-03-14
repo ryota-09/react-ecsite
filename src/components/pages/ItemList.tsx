@@ -4,7 +4,6 @@ import { FC, useCallback, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 import { useAllItemList } from "../../hooks/useAllItemList";
-import { useSelectItem } from "../../hooks/useSelectItem";
 import { ItemCard } from "./organisms/item/ItemCard";
 
 export const ItemList: FC = () => {
