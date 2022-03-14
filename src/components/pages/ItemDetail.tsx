@@ -24,6 +24,7 @@ export const ItemDetail = () => {
 
   let selectedSize = "";
   let selectedToppingList = new Array<number>();
+  let selectedAmount = 0;
 
   useEffect(() => {
     onSelectItem({ itemId: state });
@@ -31,10 +32,10 @@ export const ItemDetail = () => {
   }, []);
 
   const onChangeSize = (event: ChangeEvent<HTMLInputElement>) => {
-    alert(event.target.value);
+    selectedSize = event.target.value;
   };
   const onChangeTopping = (event: ChangeEvent<HTMLInputElement>) => {
-    alert(event.target.value);
+    
   };
   const onChangeAmount = (event: ChangeEvent<HTMLSelectElement>) => {
     alert(event.target.value);
@@ -67,7 +68,7 @@ export const ItemDetail = () => {
                 <Radio value="M" onChange={onChangeSize}>
                   M: {selectedItem?.priceM}円
                 </Radio>
-                <Radio value="L">L: {selectedItem?.priceL}円</Radio>
+                <Radio value="L" onChange={onChangeSize}>L: {selectedItem?.priceL}円</Radio>
               </Stack>
             </RadioGroup>
             {selectedItem?.toppingList?.map((topping) => (
