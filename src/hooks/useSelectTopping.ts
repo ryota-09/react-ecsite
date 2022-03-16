@@ -14,14 +14,14 @@ export const useSelectTopping = () => {
 
   useEffect(() => {
     getAllToppingList();
-  }, [])
+  }, []);
+
 
   const onSelectTopping = useCallback( (props: Props) => {
     const { toppingId } = props;
-    const targetTopping = toppingList.find((topping) => topping.id === toppingId)
+    const targetTopping = toppingList.find((topping) => topping.id === toppingId);
 
     setSelectTopping(targetTopping ?? null);
-    console.log(selectedTopping);
-  }, [])
+  }, [toppingList, selectedTopping]);
   return { selectedTopping, onSelectTopping }
 }

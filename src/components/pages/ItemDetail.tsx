@@ -10,21 +10,26 @@ import {
   Checkbox,
   Select,
 } from "@chakra-ui/react";
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import { useAllToppingList } from "../../hooks/useAllToppingList";
 import { useSelectItem } from "../../hooks/useSelectItem";
+import { useSelectTopping } from "../../hooks/useSelectTopping";
+import { Topping } from "../../types/topping";
 import { PrimaryButton } from "../atoms/button/PrimaryButton"
 
 export const ItemDetail = () => {
   const { state } = useLocation<number>();
   const { selectedItem, onSelectItem } = useSelectItem();
   const { toppingList, getAllToppingList } = useAllToppingList();
+  const { selectedTopping, onSelectTopping } = useSelectTopping();
 
-  let selectedSize = "";
-  let selectedToppingList = new Array<number>();
-  let selectedAmount = 0;
+  const [ selectedSize, setSelectedSize ] = useState("");
+  const [ selectedToppingList, setSelectedToppingList ] = useState<Array<Topping>>([]);
+  const [ selectedToppingIdList, setSelectedToppingIdList ] = useState<Array<number>>([])
+  const [ selectedAmount, setSelectedAmount ] = useState<number>();
+
 
   useEffect(() => {
     onSelectItem({ itemId: state });
@@ -32,13 +37,39 @@ export const ItemDetail = () => {
   }, []);
 
   const onChangeSize = (event: ChangeEvent<HTMLInputElement>) => {
-    selectedSize = event.target.value;
+    setSelectedSize(event.target.value);
   };
+  // v-modelのチェックボックスの再現
+  //最初に選んだものがボックスに入らない。。。
   const onChangeTopping = (event: ChangeEvent<HTMLInputElement>) => {
-    
+    event.preventDefault();
+
+    let targetId: number = Number(event.target.value);
+
+    const isInclude = (targetNum: number): boolean => {
+      return selectedToppingIdList.includes(targetId);
+    }
+    onSelectTopping({toppingId: targetId});
+
+    if( isInclude(targetId) && selectedToppingIdList.length !== 0){
+      setSelectedToppingIdList(selectedToppingIdList.filter( toppingId => toppingId  !== Number(event.target.value)))
+      // setSelectedToppingList([...selectedToppingList, selectedTopping]);
+    } else if( selectedToppingIdList.length === 0 ){
+      console.log(Number(event.target.value))
+      setSelectedToppingIdList([...selectedToppingIdList, targetId]);
+      console.log("0の方")
+    } else {
+      setSelectedToppingIdList([...selectedToppingIdList, targetId]);
+      console.log("elseの方",selectedToppingIdList);
+    }
+    console.log(selectedToppingIdList);
   };
+
+  //一度目がうまくいかない。。。
   const onChangeAmount = (event: ChangeEvent<HTMLSelectElement>) => {
-    alert(event.target.value);
+    event.preventDefault();
+    setSelectedAmount(Number(event.target.value));
+    console.log(selectedAmount);
   };
 
   const addToCart = () => {
@@ -79,7 +110,7 @@ export const ItemDetail = () => {
               </CheckboxGroup>
             ))}
             <Select placeholder="選択してください" onChange={onChangeAmount}>
-              <option value="1" selected>
+              <option value="1" defaultValue="1">
                 1
               </option>
               <option value="2">2</option>
