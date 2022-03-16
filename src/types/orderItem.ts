@@ -1,11 +1,11 @@
 import { Item } from "./item";
-import { orderTopping } from "./orderTopping";
+import { OrderTopping } from "./orderTopping";
 
-export type orderItem = {
+export type OrderItem = {
   id: number;
   itemId: number;
   quantity: number;
   size: string;
   item: Item;
-  orderToppingList: Array<orderTopping>;
+  orderToppingList: Array<OrderTopping>;
 }

@@ -1,6 +1,6 @@
 import { Topping } from "./topping";
 
-export type orderTopping = {
+export type OrderTopping = {
   id: number;
   toppingId: number;
   orderItemId: number;
