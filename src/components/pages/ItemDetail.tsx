@@ -29,6 +29,7 @@ export const ItemDetail = () => {
   const [ selectedToppingList, setSelectedToppingList ] = useState<Array<Topping>>([]);
   const [ selectedToppingIdList, setSelectedToppingIdList ] = useState<Array<number>>([])
   const [ selectedAmount, setSelectedAmount ] = useState<number>();
+  const [ subTotalPrice, setSubTotalPrice ] = useState<number>();
 
 
   useEffect(() => {
@@ -36,13 +37,43 @@ export const ItemDetail = () => {
     getAllToppingList();
   }, []);
 
+  const calcSubTotalPrice = (): void => {
+    let subTotalPrice = 0;
+    if (selectedSize === "M") {
+      let sizePrice = 0;
+      sizePrice = Number(selectedItem?.priceM)
+      if (selectedToppingList.length === 0) {
+        subTotalPrice = sizePrice * Number(selectedAmount);
+      } else if (selectedToppingList.length >= 1) {
+        let toppingAmount = 0;
+        toppingAmount = selectedToppingList.length * 200;
+        subTotalPrice =
+          (sizePrice + toppingAmount) * Number(selectedAmount);
+      }
+    } else if (selectedSize === "L") {
+      let sizePrice = 0;
+      sizePrice = Number(selectedItem?.priceL);
+      if (selectedToppingList.length === 0) {
+        subTotalPrice = sizePrice * Number(selectedAmount);
+      } else if (selectedToppingList.length >= 1) {
+        let toppingAmount = 0;
+        toppingAmount = selectedToppingList.length * 300;
+        subTotalPrice =
+          (sizePrice + toppingAmount) * Number(selectedAmount);
+      }
+    }
+    setSubTotalPrice(subTotalPrice);
+  }
+
   const onChangeSize = (event: ChangeEvent<HTMLInputElement>) => {
+    calcSubTotalPrice();
     setSelectedSize(event.target.value);
   };
   // v-modelのチェックボックスの再現
   //最初に選んだものがボックスに入らない。。。
   const onChangeTopping = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
+    calcSubTotalPrice();
 
     let targetId: number = Number(event.target.value);
 
@@ -68,9 +99,12 @@ export const ItemDetail = () => {
   //一度目がうまくいかない。。。
   const onChangeAmount = (event: ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
+    calcSubTotalPrice();
     setSelectedAmount(Number(event.target.value));
     console.log(selectedAmount);
   };
+
+  
 
   const addToCart = () => {
     alert("カート")
@@ -125,6 +159,7 @@ export const ItemDetail = () => {
               <option value="11">11</option>
               <option value="12">12</option>
             </Select>
+            <Text>合計{ subTotalPrice }円</Text>
             <PrimaryButton onClick={addToCart}>カートに追加</PrimaryButton>
           </Stack>
         </Box>
