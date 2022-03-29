@@ -32,7 +32,7 @@ export const ItemDetail: FC = () => {
 
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedToppingList, setSelectedToppingList] = useState<
-    Array<Topping>
+    Array<Topping | null>
   >([]);
   const [selectedToppingIdList, setSelectedToppingIdList] = useState<
     Array<number>
@@ -44,32 +44,6 @@ export const ItemDetail: FC = () => {
     onSelectItem({ itemId: state });
     getAllToppingList();
   }, []);
-
-  const calcSubTotalPrice = (): void => {
-    let subTotalPrice = 0;
-    if (selectedSize === "M") {
-      let sizePrice = 0;
-      sizePrice = Number(selectedItem?.priceM);
-      if (selectedToppingList.length === 0) {
-        subTotalPrice = sizePrice * Number(selectedAmount);
-      } else if (selectedToppingList.length >= 1) {
-        let toppingAmount = 0;
-        toppingAmount = selectedToppingList.length * 200;
-        subTotalPrice = (sizePrice + toppingAmount) * Number(selectedAmount);
-      }
-    } else if (selectedSize === "L") {
-      let sizePrice = 0;
-      sizePrice = Number(selectedItem?.priceL);
-      if (selectedToppingList.length === 0) {
-        subTotalPrice = sizePrice * Number(selectedAmount);
-      } else if (selectedToppingList.length >= 1) {
-        let toppingAmount = 0;
-        toppingAmount = selectedToppingList.length * 300;
-        subTotalPrice = (sizePrice + toppingAmount) * Number(selectedAmount);
-      }
-    }
-    setSubTotalPrice(subTotalPrice);
-  };
 
   const onChangeSize = (event: ChangeEvent<HTMLInputElement>) => {
     calcSubTotalPrice();
@@ -94,16 +68,12 @@ export const ItemDetail: FC = () => {
           (toppingId) => toppingId !== Number(event.target.value)
         )
       );
-      // setSelectedToppingList([...selectedToppingList, selectedTopping]);
+      setSelectedToppingList([...selectedToppingList, selectedTopping]);
     } else if (selectedToppingIdList.length === 0) {
-      console.log(Number(event.target.value));
       setSelectedToppingIdList([...selectedToppingIdList, targetId]);
-      console.log("0の方");
     } else {
       setSelectedToppingIdList([...selectedToppingIdList, targetId]);
-      console.log("elseの方", selectedToppingIdList);
     }
-    console.log(selectedToppingIdList);
   };
 
   //一度目がうまくいかない。。。
@@ -111,7 +81,6 @@ export const ItemDetail: FC = () => {
     event.preventDefault();
     calcSubTotalPrice();
     setSelectedAmount(Number(event.target.value));
-    console.log(selectedAmount);
   };
 
   //トッピングIDリストからトッピングリストを作る
@@ -135,6 +104,33 @@ export const ItemDetail: FC = () => {
       }
     }
     return currentOrderToppingList;
+  };
+
+  const calcSubTotalPrice = (): void => {
+    let subTotal = 0;
+    console.log(selectedToppingList);
+    if (selectedSize === "M") {
+      let sizePrice = 0;
+      sizePrice = Number(selectedItem?.priceM);
+      if (selectedToppingList.length === 0) {
+        subTotal = sizePrice * Number(selectedAmount ?? 1);
+      } else if (selectedToppingList.length >= 1) {
+        let toppingAmount = 0;
+        toppingAmount = selectedToppingList.length * 200;
+        subTotal = (sizePrice + toppingAmount) * Number(selectedAmount ?? 1);
+      }
+    } else if (selectedSize === "L") {
+      let sizePrice = 0;
+      sizePrice = Number(selectedItem?.priceL);
+      if (selectedToppingList.length === 0) {
+        subTotal = sizePrice * Number(selectedAmount);
+      } else if (selectedToppingList.length >= 1) {
+        let toppingAmount = 0;
+        toppingAmount = selectedToppingList.length * 300;
+        subTotal = (sizePrice + toppingAmount) * Number(selectedAmount ?? 1);
+      }
+    }
+    setSubTotalPrice(subTotal);
   };
 
   //StoreのStateに保存する。

@@ -2,6 +2,7 @@ import { CartList } from "../components/pages/Cartlist";
 import { ItemDetail } from "../components/pages/ItemDetail";
 import { ItemList } from "../components/pages/ItemList";
 import { Login } from "../components/pages/Login";
+import { OrderConfirm } from "../components/pages/OrderConfirm";
 import { RegisterUser } from "../components/pages/RegisterUser";
 
 export const HomeRoutes = [
@@ -34,5 +35,11 @@ export const HomeRoutes = [
     name: "CartList",
     exact: false,
     children: <CartList />
+  },
+  {
+    path: "/orderConfirm",
+    name: "OrderConfirm",
+    exact: false,
+    children: <OrderConfirm />
   },
 ]

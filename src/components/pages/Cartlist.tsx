@@ -1,11 +1,14 @@
-import { Box, Table, Tbody, Td, Th, Thead, Tr, Wrap,Image } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { Box, Table, Tbody, Td, Th, Thead, Tr, Wrap,Image, Button, Text } from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { OrderContext, OrderContextType } from "../../providers/OrderProvider";
 import { OrderItem } from "../../types/orderItem";
 
 export const CartList = () => {
   const { globalState } = useContext(OrderContext);
   const [currentOrderItem, setCurrentOrderItem] = useState<OrderItem>();
+  const [ totalPrice, setTotalPrice ] = useState<number>(0);
+  const history = useHistory();
 
   const calcSubTotal = (orderItemId: number): number => {
     let subTotalPrice = 0;
@@ -30,6 +33,19 @@ export const CartList = () => {
     }
     return subTotalPrice;
   }
+  const calcTotalPrice = () => {
+    let total = 0;
+    for(let orderItem of globalState.order?.orderItemList as Array<OrderItem>){
+      total += calcSubTotal(orderItem.id);
+    }
+    setTotalPrice(total);
+  }
+  const toOrderPage = () => {
+    history.push("/orderConfirm")
+  }
+  useEffect(() =>{
+    calcTotalPrice();
+  },[])
   return (
     <>
       <Wrap p={{ base: 4, md: 10 }} justify="center">
@@ -60,11 +76,17 @@ export const CartList = () => {
                 ))}
                 </Td>
                 <Td>{() => calcSubTotal(orderItem.id)}円</Td>
-                <Td>削除ボタン</Td>
+                <Td>
+                  <Button colorScheme="green">削除</Button>
+                </Td>
               </Tr>
             </Tbody>
           ))}
         </Table>
+        <Box>
+          <Text>合計金額: {totalPrice}円</Text>
+          <Button colorScheme="green"  onClick={toOrderPage}>注文に進む</Button>
+        </Box>
       </Wrap>
     </>
   );
