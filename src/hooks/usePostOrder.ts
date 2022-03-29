@@ -46,7 +46,11 @@ export const usePostOrder = () => {
           orderItemFormList: orderFormList,
         }
       );
-      console.log(response.data);
+      if(response.data.message === "success"){
+        alert("成功");
+      } else {
+        alert("失敗");
+      }
     } catch (error) {
       console.log(error);
     }

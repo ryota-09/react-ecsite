@@ -17,11 +17,13 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { useContext } from "react";
+import { usePostOrder } from "../../hooks/usePostOrder";
 import { OrderContext } from "../../providers/OrderProvider";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 
 export const OrderConfirm = () => {
   const { globalState, setGlobalState } = useContext(OrderContext);
+  const { postOrder } = usePostOrder();
   return (
     <>
       <Wrap p={{ base: 4, md: 10 }} justify="center">
@@ -145,7 +147,7 @@ export const OrderConfirm = () => {
                 />
               </InputGroup>
             </FormControl>
-            <PrimaryButton onClick={() => alert("クリック")}>注文する</PrimaryButton>
+            <Button colorScheme="green" onClick={postOrder}>注文する</Button>
           </Stack>
         </Box>
       </Flex>

@@ -1,43 +1,28 @@
 import { Box, Table, Tbody, Td, Th, Thead, Tr, Wrap,Image, Button, Text } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { usePrice } from "../../hooks/usePrice";
 import { OrderContext, OrderContextType } from "../../providers/OrderProvider";
 import { OrderItem } from "../../types/orderItem";
 
 export const CartList = () => {
   const { globalState } = useContext(OrderContext);
-  const [currentOrderItem, setCurrentOrderItem] = useState<OrderItem>();
-  const [ totalPrice, setTotalPrice ] = useState<number>(0);
+  const { subTotalPrice, calcSubTotalPrice } = usePrice();
+  
+  const [ totalPrice, setTotalPrice ] = useState(0);
   const history = useHistory();
 
-  const calcSubTotal = (orderItemId: number): number => {
-    let subTotalPrice = 0;
-    for(let orderItem of globalState.order?.orderItemList as Array<OrderItem>){
-      if( orderItem.id === orderItemId ){
-        setCurrentOrderItem(orderItem);
-      }
-    }
-    const TOPPING_PRICE_M = 200;
-    const TOPPING_PRICE_L = 300;
-
-    if (currentOrderItem?.size === "M") {
-      //トッピングの合計金額
-      const toppingSubTotalM = currentOrderItem?.orderToppingList.length * TOPPING_PRICE_M;
-      //Mサイズの場合の小計
-      subTotalPrice = (currentOrderItem?.item.priceM + toppingSubTotalM) * currentOrderItem?.quantity;
-    } else if (currentOrderItem?.size === "L") {
-      //トッピングの合計金額
-      const toppingSubTotalL = currentOrderItem?.orderToppingList.length * TOPPING_PRICE_L;
-      //Lサイズの場合の小計
-      subTotalPrice = (currentOrderItem?.item.priceL + toppingSubTotalL) * currentOrderItem?.quantity;
-    }
-    return subTotalPrice;
-  }
+  
   const calcTotalPrice = () => {
     let total = 0;
     for(let orderItem of globalState.order?.orderItemList as Array<OrderItem>){
-      total += calcSubTotal(orderItem.id);
+      console.log(orderItem);
+      console.log(subTotalPrice);
+      calcSubTotalPrice(orderItem.id)
+      total += subTotalPrice;
     }
+    console.log(total);
+    console.log(totalPrice);
     setTotalPrice(total);
   }
   const toOrderPage = () => {
@@ -75,7 +60,7 @@ export const CartList = () => {
                   </Box>
                 ))}
                 </Td>
-                <Td>{() => calcSubTotal(orderItem.id)}円</Td>
+                <Td>{() => calcSubTotalPrice(orderItem.id)}円</Td>
                 <Td>
                   <Button colorScheme="green">削除</Button>
                 </Td>
