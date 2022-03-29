@@ -29,7 +29,7 @@ export type Order = {
     //支払い方法
      paymentMethod: number;
     //ユーザー
-     user: User;
+     user: User | null;
     //注文商品リスト
      orderItemList: Array<OrderItem>
 

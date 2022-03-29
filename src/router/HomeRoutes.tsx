@@ -1,3 +1,4 @@
+import { CartList } from "../components/pages/Cartlist";
 import { ItemDetail } from "../components/pages/ItemDetail";
 import { ItemList } from "../components/pages/ItemList";
 import { Login } from "../components/pages/Login";
@@ -27,5 +28,11 @@ export const HomeRoutes = [
     name: "ItemDetail",
     exact: false,
     children: <ItemDetail />
+  },
+  {
+    path: "/cartList",
+    name: "CartList",
+    exact: false,
+    children: <CartList />
   },
 ]

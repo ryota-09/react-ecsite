@@ -4,5 +4,5 @@ export type OrderTopping = {
   id: number;
   toppingId: number;
   orderItemId: number;
-  topping: Topping;
+  topping: Topping | null;
 }
