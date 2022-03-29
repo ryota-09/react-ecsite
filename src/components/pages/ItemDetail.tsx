@@ -11,7 +11,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { ChangeEvent, FC, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { useAllToppingList } from "../../hooks/useAllToppingList";
 import { useOrder } from "../../hooks/useOrder";
@@ -23,6 +23,7 @@ import { Topping } from "../../types/topping";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
 
 export const ItemDetail: FC = () => {
+  const history = useHistory();
   const { state } = useLocation<number>();
   const { selectedItem, onSelectItem } = useSelectItem();
   const { toppingList, getAllToppingList } = useAllToppingList();
@@ -168,8 +169,8 @@ export const ItemDetail: FC = () => {
         },
       },
     });
+    history.push("/cartList");
   };
-
   return (
     <>
       <Flex
