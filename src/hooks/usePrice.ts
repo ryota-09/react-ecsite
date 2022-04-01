@@ -11,6 +11,7 @@ export const usePrice = () => {
 
   const calcSubTotalPrice = useCallback((orderItemId: number, orderToppingList: Array<OrderTopping>) => {
     setSubTotalPrice(0);
+    let newPrice = 0;
     for(let orderItem of globalState.orderItemList as Array<OrderItem>){
       if( orderItem.id === orderItemId ){
         setCurrentOrderItem(orderItem);
@@ -22,13 +23,15 @@ export const usePrice = () => {
     if (currentOrderItem?.size === "M") {
       //トッピングの合計金額
       const toppingSubTotalM = currentOrderItem?.orderToppingList.length * TOPPING_PRICE_M;
+      newPrice = (currentOrderItem?.item.priceM + toppingSubTotalM) * currentOrderItem?.quantity;
       //Mサイズの場合の小計
-      setSubTotalPrice((currentOrderItem?.item.priceM + toppingSubTotalM) * currentOrderItem?.quantity);
+      setSubTotalPrice(newPrice);
     } else if (currentOrderItem?.size === "L") {
       //トッピングの合計金額
       const toppingSubTotalL = currentOrderItem?.orderToppingList.length * TOPPING_PRICE_L;
+      newPrice = (currentOrderItem?.item.priceL + toppingSubTotalL) * ( currentOrderItem?.quantity);
       //Lサイズの場合の小計
-      setSubTotalPrice((currentOrderItem?.item.priceL + toppingSubTotalL) * ( currentOrderItem?.quantity));
+      setSubTotalPrice(newPrice);
     }
   },[globalState, currentOrderItem]);
 

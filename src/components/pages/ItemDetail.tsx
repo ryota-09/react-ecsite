@@ -59,7 +59,7 @@ export const ItemDetail: FC = () => {
     let targetId: number = Number(event.target.value);
 
     const isInclude = (targetNum: number): boolean => {
-      return !selectedToppingIdList.includes(targetId);
+      return selectedToppingIdList.includes(targetId);
     };
     onSelectTopping({ toppingId: targetId });
 
@@ -144,11 +144,13 @@ export const ItemDetail: FC = () => {
   const addToCart = () => {
     const orderItemList = globalState.orderItemList;
     let newNumber = 0;
-    ///////////idの採番がうまくいかない///////////////
-    // if (orderItemList !== undefined) {
-    //   const latestOrderItem = orderItemList[orderItemList.length - 1];
-    //   newNumber = latestOrderItem.id + 1;
-    // }
+    console.log(orderItemList)
+    /////////idの採番がうまくいかない///////////////
+    if (orderItemList.length !== 0) {
+      const latestOrderItem = orderItemList[orderItemList.length - 1];
+      newNumber = latestOrderItem.id + 1;
+    }
+    console.log(newNumber);
     setGlobalState({
       type: "ADD_ITEM",
       payload: {

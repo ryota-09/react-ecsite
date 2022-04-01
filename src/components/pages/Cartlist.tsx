@@ -17,7 +17,7 @@ export const CartList = () => {
   const calcTotalPrice = () => {
     let total = 0;
     for(let orderItem of globalState.orderItemList as Array<OrderItem>){
-      // calcSubTotalPrice(orderItem.id);
+      calcSubTotalPrice(orderItem.id, orderItem.orderToppingList);
       total = total + subTotalPrice;
     } 
     setTotalPrice(total);
@@ -27,7 +27,7 @@ export const CartList = () => {
   }
   useEffect(() =>{
     calcTotalPrice();
-  },[subTotalPrice])
+  })
   return (
     <>
       <Wrap p={{ base: 4, md: 10 }} justify="center">

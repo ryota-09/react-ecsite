@@ -22,14 +22,12 @@ export const usePostOrder = () => {
         size: orderItem.size
       });
     }
-    console.log(newArray);
     setOrderFormList([...newArray]);
   };
   useEffect(() => {
     makeOrderFormList();
-  }, [globalState]);
+  });
   const postOrder = useCallback(async () => {
-    console.log(orderFormList);
     try {
       const response = await axios.post(
         "http://153.127.48.168:8080/ecsite-api/order",

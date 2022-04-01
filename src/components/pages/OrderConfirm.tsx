@@ -16,10 +16,11 @@ import {
   InputGroup,
   Input,
 } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { usePostOrder } from "../../hooks/usePostOrder";
 import { OrderContext } from "../../providers/OrderProvider";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
+import { SubTotalArea } from "../atoms/SubTotalArea";
 
 export const OrderConfirm = () => {
   const { globalState, setGlobalState } = useContext(OrderContext);
@@ -63,7 +64,7 @@ export const OrderConfirm = () => {
                       </Box>
                     ))}
                   </Td>
-                  <Td>小計の表示( )円</Td>
+                  <Td>小計の表示<SubTotalArea orderItemId={orderItem.id} orderToppingList={orderItem.orderToppingList}/></Td>
                 </Tr>
               </Tbody>
             ))}

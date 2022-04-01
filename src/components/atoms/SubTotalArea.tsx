@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { usePrice } from "../../hooks/usePrice";
 import { OrderTopping } from "../../types/orderTopping";
 
@@ -10,12 +10,16 @@ type Props = {
 export const SubTotalArea: FC<Props> = (props) => {
   const { orderItemId, orderToppingList } = props;
   const { subTotalPrice, calcSubTotalPrice } = usePrice();
+  // useEffect(() => {
+  //   calcSubTotalPrice(orderItemId, orderToppingList);
+  // },[orderItemId, orderToppingList]);
+
   useEffect(() => {
-    calcSubTotalPrice(orderItemId, orderToppingList);
-  },[orderItemId, orderToppingList]);
+    calcSubTotalPrice(orderItemId, orderToppingList)
+  })
   return (
     <>
       <span>{subTotalPrice}円</span>
     </>
   )
-};
+}
