@@ -7,12 +7,11 @@ import { OrderItem } from "../../types/orderItem";
 import { SubTotalArea } from "../atoms/SubTotalArea";
 
 export const CartList = () => {
-  const { globalState } = useContext(OrderContext);
+  const { globalState, setGlobalState } = useContext(OrderContext);
   const { subTotalPrice, calcSubTotalPrice } = usePrice();
   
   const [ totalPrice, setTotalPrice ] = useState(0);
   const history = useHistory();
-
   
   const calcTotalPrice = () => {
     let total = 0;
@@ -23,7 +22,16 @@ export const CartList = () => {
     setTotalPrice(total);
   }
   const toOrderPage = () => {
-    history.push("/orderConfirm")
+    setGlobalState({
+      type: "SET_TOTALPRICE",
+      payload: {
+        totalPrice: totalPrice
+      }
+    })
+    history.push("/orderConfirm");
+  };
+  const toListPage = () => {
+    history.push("/");
   }
   useEffect(() =>{
     calcTotalPrice();
@@ -47,13 +55,13 @@ export const CartList = () => {
               <Tr>
                 <Td>
                   <Image src={orderItem.item.imagePath} objectFit="cover" boxSize="100px"/>
-                  <p>{orderItem.item.name}</p>
+                  <Text>{orderItem.item.name}</Text>
                 </Td>
                 <Td>{orderItem.size} {orderItem.item.priceM}円 {orderItem.quantity}個</Td>
                 <Td>
                 {orderItem.orderToppingList.map((orderTopping, i) => (
                   <Box  key={orderTopping.id}>
-                    <p>{orderTopping.topping?.name} {orderTopping.topping?.priceM}円</p>
+                    <Text>{orderTopping.topping?.name} {orderTopping.topping?.priceM}円</Text>
                   </Box>
                 ))}
                 </Td>
@@ -70,6 +78,7 @@ export const CartList = () => {
         <Box>
           <Text>合計金額: {totalPrice}円</Text>
           <Button colorScheme="green"  onClick={toOrderPage}>注文に進む</Button>
+          <Button colorScheme="gray"  onClick={toListPage}>買い物を続ける</Button>
         </Box>
       </Wrap>
     </>

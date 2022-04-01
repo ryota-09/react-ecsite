@@ -16,15 +16,21 @@ import {
   InputGroup,
   Input,
 } from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { usePostOrder } from "../../hooks/usePostOrder";
+import { usePrice } from "../../hooks/usePrice";
 import { OrderContext } from "../../providers/OrderProvider";
-import { PrimaryButton } from "../atoms/button/PrimaryButton";
+import { OrderItem } from "../../types/orderItem";
 import { SubTotalArea } from "../atoms/SubTotalArea";
 
 export const OrderConfirm = () => {
-  const { globalState, setGlobalState } = useContext(OrderContext);
+  const { globalState } = useContext(OrderContext);
   const { postOrder } = usePostOrder();
+  const { subTotalPrice, calcSubTotalPrice } = usePrice();
+  let totalPrice = 0;
+
+  
+
   return (
     <>
       <Wrap p={{ base: 4, md: 10 }} justify="center">
@@ -48,7 +54,7 @@ export const OrderConfirm = () => {
                       objectFit="cover"
                       boxSize="100px"
                     />
-                    <p>{orderItem.item.name}</p>
+                    <Text>{orderItem.item.name}</Text>
                   </Td>
                   <Td>
                     {orderItem.size} {orderItem.item.priceM}円{" "}
@@ -57,10 +63,10 @@ export const OrderConfirm = () => {
                   <Td>
                     {orderItem.orderToppingList.map((orderTopping, i) => (
                       <Box key={orderTopping.id}>
-                        <p>
+                        <Text>
                           {orderTopping.topping?.name}{" "}
                           {orderTopping.topping?.priceM}円
-                        </p>
+                        </Text>
                       </Box>
                     ))}
                   </Td>
@@ -68,6 +74,9 @@ export const OrderConfirm = () => {
                 </Tr>
               </Tbody>
             ))}
+            <Text>
+              合計金額: {globalState.totalPrice}円
+            </Text>
           </Table>
         </Box>
         <Flex align="center" justify="center">

@@ -31,8 +31,8 @@ type State = {
 };
 
 type Action = {
-  type: "ADD_ITEM";
-  payload: { orderItem: OrderItem };
+  type: "ADD_ITEM" | "SET_TOTALPRICE";
+  payload: { orderItem?: OrderItem, totalPrice?: number, };
 };
 
 const initialState: State = {
@@ -55,10 +55,15 @@ const initialState: State = {
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_ITEM":
-      return {
+      return action.payload.orderItem ? {
         ...state,
         orderItemList: [...state.orderItemList, action.payload.orderItem],
-      };
+      } : state;
+    case "SET_TOTALPRICE":
+      return {
+        ...state,
+        totalPrice: action.payload.totalPrice ? action.payload?.totalPrice : 0
+      }
     default:
       return state;
   }

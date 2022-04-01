@@ -26,7 +26,7 @@ export const usePostOrder = () => {
   };
   useEffect(() => {
     makeOrderFormList();
-  });
+  },[]);
   const postOrder = useCallback(async () => {
     try {
       const response = await axios.post(
@@ -34,7 +34,7 @@ export const usePostOrder = () => {
         {
           userId: 12,
           status: globalState.status,
-          totalPrice: 20000,
+          totalPrice: globalState.totalPrice,
           destinationName: globalState.destinationName,
           destinationEmail: globalState.destinationEmail,
           destinationZipcode: globalState.destinationZipcode,
@@ -48,8 +48,6 @@ export const usePostOrder = () => {
       console.log(response.data);
       if(response.data.status === "success"){
         alert("成功");
-      } else {
-        alert("失敗");
       }
     } catch (error) {
       console.log(error);

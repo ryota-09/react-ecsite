@@ -16,7 +16,7 @@ export const SubTotalArea: FC<Props> = (props) => {
 
   useEffect(() => {
     calcSubTotalPrice(orderItemId, orderToppingList)
-  })
+  },[props])
   return (
     <>
       <span>{subTotalPrice}円</span>
