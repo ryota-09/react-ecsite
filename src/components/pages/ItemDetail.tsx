@@ -15,12 +15,14 @@ import { useHistory, useLocation } from "react-router-dom";
 
 import { useAllToppingList } from "../../hooks/useAllToppingList";
 import { useOrder } from "../../hooks/useOrder";
+import { usePrice } from "../../hooks/usePrice";
 import { useSelectItem } from "../../hooks/useSelectItem";
 import { useSelectTopping } from "../../hooks/useSelectTopping";
 import { Item } from "../../types/item";
 import { OrderTopping } from "../../types/orderTopping";
 import { Topping } from "../../types/topping";
 import { PrimaryButton } from "../atoms/button/PrimaryButton";
+import { SubTotalArea } from "../atoms/SubTotalArea";
 
 export const ItemDetail: FC = () => {
   const history = useHistory();
@@ -38,7 +40,8 @@ export const ItemDetail: FC = () => {
     Array<number>
   >([]);
   const [selectedAmount, setSelectedAmount] = useState<number>();
-  const [subTotalPrice, setSubTotalPrice] = useState<number>();
+  const [ orderToppingList, setOrderToppingList ] = useState<Array<OrderTopping>>([])
+  const [subTotalPrice, setSubTotalPrice] = useState<number>(0);
 
   useEffect(() => {
     onSelectItem({ itemId: state });
@@ -46,19 +49,17 @@ export const ItemDetail: FC = () => {
   }, []);
 
   const onChangeSize = (event: ChangeEvent<HTMLInputElement>) => {
-    calcSubTotalPrice();
     setSelectedSize(event.target.value);
   };
   // v-modelのチェックボックスの再現
   //最初に選んだものがボックスに入らない。。。
   const onChangeTopping = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    calcSubTotalPrice();
 
     let targetId: number = Number(event.target.value);
 
     const isInclude = (targetNum: number): boolean => {
-      return selectedToppingIdList.includes(targetId);
+      return !selectedToppingIdList.includes(targetId);
     };
     onSelectTopping({ toppingId: targetId });
 
@@ -79,14 +80,13 @@ export const ItemDetail: FC = () => {
   //一度目がうまくいかない。。。
   const onChangeAmount = (event: ChangeEvent<HTMLSelectElement>) => {
     event.preventDefault();
-    calcSubTotalPrice();
     setSelectedAmount(Number(event.target.value));
   };
 
   //トッピングIDリストからトッピングリストを作る
   const changeSelectedToppingList = (
     toppingIdList: Array<number>
-  ): Array<OrderTopping> => {
+  ) => {
     const currentOrderToppingList: Array<OrderTopping> = [];
     let i = 0;
     for (let toppingId of toppingIdList) {
@@ -103,10 +103,14 @@ export const ItemDetail: FC = () => {
         currentOrderToppingList.push(orderTopping);
       }
     }
-    return currentOrderToppingList;
+    setOrderToppingList([...currentOrderToppingList]);
   };
+  useEffect(() => {
+    changeSelectedToppingList(selectedToppingIdList)
+  }, [selectedToppingIdList])
 
   const calcSubTotalPrice = (): void => {
+    setSubTotalPrice(0);
     let subTotal = 0;
     console.log(selectedToppingList);
     if (selectedSize === "M") {
@@ -132,10 +136,13 @@ export const ItemDetail: FC = () => {
     }
     setSubTotalPrice(subTotal);
   };
+  useEffect(() => {
+    calcSubTotalPrice();
+  },[selectedSize, selectedToppingList, selectedAmount, selectedToppingIdList])
 
   //StoreのStateに保存する。
   const addToCart = () => {
-    const orderItemList = globalState.order?.orderItemList;
+    const orderItemList = globalState.orderItemList;
     let newNumber = 0;
     ///////////idの採番がうまくいかない///////////////
     // if (orderItemList !== undefined) {
@@ -161,7 +168,7 @@ export const ItemDetail: FC = () => {
             deleted: selectedItem?.deleted ?? false,
             toppingList: selectedItem?.toppingList ?? null,
           },
-          orderToppingList: changeSelectedToppingList(selectedToppingIdList),
+          orderToppingList: orderToppingList,
         },
       },
     });
@@ -177,6 +184,9 @@ export const ItemDetail: FC = () => {
       >
         <Box w="100%" bg="white" m={5} borderRadius="10px" shadow="md" p={4}>
           <Stack textAlign="center">
+          <Text>
+              合計{subTotalPrice}
+            </Text>
             <Image
               boxSize="160px"
               borderRadius="10px"
@@ -225,7 +235,9 @@ export const ItemDetail: FC = () => {
               <option value="11">11</option>
               <option value="12">12</option>
             </Select>
-            <Text>合計{subTotalPrice}円</Text>
+            <Text>
+              合計{subTotalPrice}
+            </Text>
             <PrimaryButton onClick={addToCart}>カートに追加</PrimaryButton>
           </Stack>
         </Box>

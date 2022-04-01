@@ -38,7 +38,7 @@ export const OrderConfirm = () => {
                 <Th>小計</Th>
               </Tr>
             </Thead>
-            {globalState.order?.orderItemList.map((orderItem, index) => (
+            {globalState.orderItemList.map((orderItem, index) => (
               <Tbody key={orderItem.id}>
                 <Tr>
                   <Td>

@@ -32,5 +32,4 @@ export type Order = {
      user: User | null;
     //注文商品リスト
      orderItemList: Array<OrderItem>
-
 }

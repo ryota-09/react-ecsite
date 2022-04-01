@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useContext, useState } from "react"
+import { useCallback, useContext, useState } from "react";
 import { OrderContext } from "../providers/OrderProvider";
 import { OrderItem } from "../types/orderItem";
+import { OrderTopping } from "../types/orderTopping";
 
 export const usePrice = () => {
   const { globalState } = useContext(OrderContext);
   const [currentOrderItem, setCurrentOrderItem] = useState<OrderItem>();
   const [ subTotalPrice, setSubTotalPrice ] = useState(0);
 
-  const calcSubTotalPrice = useCallback((orderItemId: number) => {
-    for(let orderItem of globalState.order?.orderItemList as Array<OrderItem>){
+  const calcSubTotalPrice = useCallback((orderItemId: number, orderToppingList: Array<OrderTopping>) => {
+    setSubTotalPrice(0);
+    for(let orderItem of globalState.orderItemList as Array<OrderItem>){
       if( orderItem.id === orderItemId ){
         setCurrentOrderItem(orderItem);
       }
@@ -26,9 +28,9 @@ export const usePrice = () => {
       //トッピングの合計金額
       const toppingSubTotalL = currentOrderItem?.orderToppingList.length * TOPPING_PRICE_L;
       //Lサイズの場合の小計
-      setSubTotalPrice((currentOrderItem?.item.priceL + toppingSubTotalL) * currentOrderItem?.quantity);
+      setSubTotalPrice((currentOrderItem?.item.priceL + toppingSubTotalL) * ( currentOrderItem?.quantity));
     }
-  },[globalState]);
+  },[globalState, currentOrderItem]);
 
   return { subTotalPrice, calcSubTotalPrice }
 }

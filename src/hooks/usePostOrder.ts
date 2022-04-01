@@ -14,39 +14,41 @@ export const usePostOrder = () => {
   const { globalState } = useContext(OrderContext);
   const [orderFormList, setOrderFormList] = useState<Array<orderForm>>();
   const makeOrderFormList = () => {
-    const newArray = [];
-    for (const orderItem of globalState.order
-      ?.orderItemList as Array<OrderItem>) {
+    const newArray = new Array<orderForm>();
+    for (const orderItem of globalState.orderItemList as Array<OrderItem>) {
       newArray.push({
         itemId: orderItem.itemId,
         quantity: orderItem.quantity,
-        size: orderItem.size,
+        size: orderItem.size
       });
     }
+    console.log(newArray);
     setOrderFormList([...newArray]);
   };
   useEffect(() => {
     makeOrderFormList();
-  }, []);
+  }, [globalState]);
   const postOrder = useCallback(async () => {
+    console.log(orderFormList);
     try {
       const response = await axios.post(
         "http://153.127.48.168:8080/ecsite-api/order",
         {
           userId: 12,
-          status: globalState.order?.status,
+          status: globalState.status,
           totalPrice: 20000,
-          destinationName: globalState.order?.destinationName,
-          destinationEmail: globalState.order?.destinationEmail,
-          destinationZipcode: globalState.order?.destinationZipcode,
-          destinationAddress: globalState.order?.destinationAddress,
-          destinationTel: globalState.order?.destinationTel,
+          destinationName: globalState.destinationName,
+          destinationEmail: globalState.destinationEmail,
+          destinationZipcode: globalState.destinationZipcode,
+          destinationAddress: globalState.destinationAddress,
+          destinationTel: globalState.destinationTel,
           deliveryTime: format(new Date(), "yyyy/MM/dd hh:mm:ss"),
-          paymentMethod: globalState.order?.paymentMethod,
+          paymentMethod: globalState.paymentMethod,
           orderItemFormList: orderFormList,
         }
       );
-      if(response.data.message === "success"){
+      console.log(response.data);
+      if(response.data.status === "success"){
         alert("成功");
       } else {
         alert("失敗");
@@ -54,6 +56,6 @@ export const usePostOrder = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [globalState, orderFormList]);
   return { postOrder };
 };

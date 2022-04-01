@@ -2,8 +2,9 @@ import { Box, Table, Tbody, Td, Th, Thead, Tr, Wrap,Image, Button, Text } from "
 import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { usePrice } from "../../hooks/usePrice";
-import { OrderContext, OrderContextType } from "../../providers/OrderProvider";
+import { OrderContext } from "../../providers/OrderProvider";
 import { OrderItem } from "../../types/orderItem";
+import { SubTotalArea } from "../atoms/SubTotalArea";
 
 export const CartList = () => {
   const { globalState } = useContext(OrderContext);
@@ -15,14 +16,10 @@ export const CartList = () => {
   
   const calcTotalPrice = () => {
     let total = 0;
-    for(let orderItem of globalState.order?.orderItemList as Array<OrderItem>){
-      console.log(orderItem);
-      console.log(subTotalPrice);
-      calcSubTotalPrice(orderItem.id)
-      total += subTotalPrice;
-    }
-    console.log(total);
-    console.log(totalPrice);
+    for(let orderItem of globalState.orderItemList as Array<OrderItem>){
+      // calcSubTotalPrice(orderItem.id);
+      total = total + subTotalPrice;
+    } 
     setTotalPrice(total);
   }
   const toOrderPage = () => {
@@ -30,7 +27,7 @@ export const CartList = () => {
   }
   useEffect(() =>{
     calcTotalPrice();
-  },[])
+  },[subTotalPrice])
   return (
     <>
       <Wrap p={{ base: 4, md: 10 }} justify="center">
@@ -45,7 +42,7 @@ export const CartList = () => {
               <Th>ボタンの部分</Th>
             </Tr>
           </Thead>
-          {globalState.order?.orderItemList.map((orderItem, index) => (
+          {globalState.orderItemList.map((orderItem, index) => (
             <Tbody key={orderItem.id}>
               <Tr>
                 <Td>
@@ -60,7 +57,9 @@ export const CartList = () => {
                   </Box>
                 ))}
                 </Td>
-                <Td>{() => calcSubTotalPrice(orderItem.id)}円</Td>
+                <Td>
+                <SubTotalArea orderItemId={orderItem.id} orderToppingList={orderItem.orderToppingList}/>
+                </Td>
                 <Td>
                   <Button colorScheme="green">削除</Button>
                 </Td>
